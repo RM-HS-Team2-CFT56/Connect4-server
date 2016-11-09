@@ -22,10 +22,9 @@ public class Connect4Controller {
         if (counter.get() >1 ) {
             return new Connect4(counter.get() , " This game is two player! you should try Play Station 4 instead ;)");
         }
-        System.out.println(" ----> "+ servletRequest.getRemoteAddr());
-
         name2Ip.put(name, servletRequest.getRemoteAddr());
-        return new Connect4(counter.incrementAndGet(), String.format("Hej " + name +", you are connected successfully!  "));
+        String msg = counter.get() == 0 ? " player one " : " player two" ;
+        return new Connect4(counter.incrementAndGet(), String.format("Hej " + name +", you are" + msg));
     }
 
     @RequestMapping(method = RequestMethod.POST, value= "myupdate")  // http://127.0.0.1:8080/myupdate
