@@ -17,15 +17,31 @@ public class Connect4Controller {
     private final AtomicLong counter = new AtomicLong();
     private final Map<String, String> name2Ip = new HashMap<>(2);
 
-    @RequestMapping("/connect")    //http://127.0.0.1:8080/connect/    or http://127.0.0.1:8080/connect?name=Mahdi
-    public Connect4 anything(@RequestParam(value="name" ) String name, HttpServletRequest servletRequest) {
+//    @RequestMapping("/connect")    //http://127.0.0.1:8080/connect/    or http://127.0.0.1:8080/connect?name=Mahdi
+//    public Connect4 anything(@RequestParam(value="name" ) String name, HttpServletRequest servletRequest) {
+//        if (counter.get() >1 ) {
+//            return new Connect4(counter.get() , " This game is two player! you should try Play Station 4 instead ;)");
+//        }
+//        name2Ip.put(name, servletRequest.getRemoteAddr());
+//        String msg = counter.get() == 0 ? " player one " : " player two" ;
+//        return new Connect4(counter.incrementAndGet(), String.format("Hej " + name +", you are" + msg));
+//    }
+
+
+    @RequestMapping(method = RequestMethod.POST, value= "connect2Server")  // http://127.0.0.1:8080/connect2Server
+    public Connect4 connectionHandler(@RequestBody Map<String, Object> Url , HttpServletRequest servletRequest){
+        Map<String, String> respon = new HashMap<String, String>();
+
         if (counter.get() >1 ) {
             return new Connect4(counter.get() , " This game is two player! you should try Play Station 4 instead ;)");
         }
-        name2Ip.put(name, servletRequest.getRemoteAddr());
+
         String msg = counter.get() == 0 ? " player one " : " player two" ;
-        return new Connect4(counter.incrementAndGet(), String.format("Hej " + name +", you are" + msg));
+        return new Connect4(counter.incrementAndGet() , "Hej " + Url.get("name") + ", you are " + msg );
     }
+
+
+
 
     @RequestMapping(method = RequestMethod.POST, value= "myupdate")  // http://127.0.0.1:8080/myupdate
     public Map<String, String> uploadMultimedia(@RequestBody Map<String, Object> Url){
@@ -34,6 +50,8 @@ public class Connect4Controller {
         respon.put("message" , " finishes!! your id is " + counter.get());
         return respon;
     }
+
+
 
 
 
