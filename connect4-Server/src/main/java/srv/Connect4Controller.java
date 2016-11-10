@@ -1,12 +1,10 @@
 package srv;
 
-import java.security.PrivateKey;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -52,7 +50,8 @@ public class Connect4Controller {
         id2Ip.put((int) counter.get() + 1, servletRequest.getRemoteAddr());
         String msg = counter.get() == 0 ? " player one " : " player two";
 
-        respon.put("message" , "ID: " +counter.incrementAndGet()  +" - Hej " + name + ", you are " + msg);
+        respon.put("ID" , counter.incrementAndGet()+ "" );
+        respon.put("message" , " Hej " + name + ", you are " + msg);
         return respon;
 //        return new Connect4(counter.incrementAndGet(), "Hej " + name + ", you are " + msg);
     }
@@ -62,6 +61,7 @@ public class Connect4Controller {
     public Map<String, String> getCurrentState() {
         Map<String, String> respon = new HashMap<String, String>();
 
+//        System.out.println("get state ====> " + loc[0][3]);
 
         if (counter.get() == 0) {
             isPlayerOneTurn = true;
@@ -70,6 +70,11 @@ public class Connect4Controller {
             isPlayerTwoTurn = true;
             isPlayerOneTurn = false;
         }
+
+
+
+        System.out.println(" THE WINNER IN -----> " + defineWinner(loc));
+
         if (isPlayerOneTurn) {
             respon.put("message: ", " player one turn.");
             return respon;
@@ -79,7 +84,61 @@ public class Connect4Controller {
         }
         return null;
     }
+    //--------------------------------------------------------------------------------------------------------
+    private Map<String, String> defineWinner(int[][] loc) {
 
+        Map<String, String> resp = new HashMap<>();
+
+        outOfLoop:
+        {
+            for (int y = 0; y <= 5; y++) { // for col0 - col3 ( for first 4 column in the left)
+                for (int x = 0; x <= 3; x++) {
+                    resp.put("message", whoIsWinnerHoriz(x, y, loc).get("message"));
+                   // age message winnero peida karde break kon, vagar na ma be loope dovomi ham niaz darim!
+
+                    break outOfLoop;
+                }
+            }
+            for (int x = 0; x <= 6; x++) { // for row0 - row2 ( for first 3 row in the bottom)
+                for (int y = 0; y <= 2; y++) {
+                    resp.put("message", whoIsWinnerVert(x, y, loc).get("message"));
+                    break outOfLoop;
+                }
+            }
+        }
+        return resp;
+    }
+    //--------------------------------------------------------------------------------------------------------
+    private Map<String, String> whoIsWinnerHoriz(int x, int y, int[][] loc) { //x:0-3 , y:0-5
+        Map<String, String> resp = new HashMap<>();
+        if ((loc[y][x] == 1) && (loc[y][x+1] == 1) && (loc[y][x+2] == 1) && (loc[y][x+3] == 1)){
+            resp.put("message" , " player one won :)");
+            return resp;
+        }
+        if ((loc[y][x] == 2) && (loc[y][x+1] == 2) && (loc[y][x+2] == 2) && (loc[y][x+3] == 2)){
+            resp.put("message" , " player two won :)");
+            return resp;
+        }
+        resp.put("message" , " no winner in horizontal view");
+        return resp;
+    }
+
+    //--------------------------------------------------------------------------------------------------------
+    private Map<String,String> whoIsWinnerVert(int x, int y, int[][] loc) {
+        Map<String, String> resp = new HashMap<>();
+        if ((loc[y][x] == 1) && (loc[y+1][x] == 1) && (loc[y+2][x] == 1) && (loc[y+3][x] == 1)){
+            System.out.println("AVALI ---------------------------> " + y + ","+ x + "  loc is ==> " + loc[y][x] + " "+loc[y+1][x]+" "+loc[y+2][x]+" " +loc[y+3][x]);
+            resp.put("message" , " player one won :)");
+            return resp;
+        }
+        if ((loc[y][x] == 2) && (loc[y+1][x] == 2) && (loc[y+2][x] == 2) && (loc[y+3][x] == 2)){
+            System.out.println("DOVOMI ---------------------------> "+ y + ","+ x + "  loc is ==> " + loc[y][x] + " "+loc[y+1][x]+" "+loc[y+2][x]+" " +loc[y+3][x]);
+            resp.put("message" , " player two won :)");
+            return resp;
+        }
+        resp.put("message" , " no winner in vertical view ");
+        return resp;
+    }
     //--------------------------------------------------------------------------------------------------------
     @RequestMapping(method = RequestMethod.POST, value = "enterDisc")  // http://127.0.0.1:8080/connect2Server
     public Map<String, String> enterTheDisk(@RequestBody Map<String, Object> Url, HttpServletRequest servletRequest) {
@@ -104,8 +163,11 @@ public class Connect4Controller {
 //            }
 //        }
 
-        System.out.println(" ----> " + Url.get("col"));
-        System.out.println(" =====> " + loc[0][3]);
+        System.out.println("col value: ----> " + Url.get("col"));
+        System.out.println("loc[0][3] val is: ===> " + loc[0][3]);
+        System.out.println("loc[1][3] val is: ===> " + loc[1][3]);
+        System.out.println("loc[2][3] val is: ===> " + loc[2][3]);
+        System.out.println("loc[3][3] val is: ===> " + loc[3][3]);
 
         topOFThisColumn = topOfColumn(column);
 
@@ -128,6 +190,7 @@ public class Connect4Controller {
         int topIs = 0;  // if the column getting ful (means loc is not ==0 anymore), it will skip bottom for-loop and return 0 !
 
         for (int i = 0; i <6  ; i++) {
+//            System.out.println("==========>  injas" );
             if ( (i == 5) && (loc[i][column] != 0)) { // if the column getting ful or user try to change same location
                 return 10;
             }
@@ -136,7 +199,7 @@ public class Connect4Controller {
                 break;
             }
         }
-        System.out.println(" ----> " + "top ine: " + topIs);
+        System.out.println("top is: ----> " + "top ine: " + topIs);
         return topIs;
     }
 //--------------------------------------------------------------------------------------------------------
