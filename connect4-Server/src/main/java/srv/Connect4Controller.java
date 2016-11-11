@@ -26,7 +26,7 @@ public class Connect4Controller {
     private static boolean isPlayerTwoTurn;
     private int[][] loc = new int[6][7];
     private int lastMove = -1;
-
+    //--------------------------------------------------------------------------------------------------------
 
 //    @RequestMapping("/connect")    //http://127.0.0.1:8080/connect/    or http://127.0.0.1:8080/connect?name=Mahdi //TODO: delete it
 //    public Connect4 anything(@RequestParam(value="name" ) String name, HttpServletRequest servletRequest) {
@@ -37,16 +37,17 @@ public class Connect4Controller {
 //        String msg = counter.get() == 0 ? " player one " : " player two" ;
 //        return new Connect4(counter.incrementAndGet(), String.format("Hej " + name +", you are" + msg));
 //    }
-
+    //--------------------------------------------------------------------------------------------------------
 
     @RequestMapping(method = RequestMethod.POST, value = "connect2Server")  // http://127.0.0.1:8080/connect2Server
     public Map<String, String> connectionHandler(@RequestBody Map<String, Object> Url, HttpServletRequest servletRequest) {
         Map<String, String> respon = new HashMap<String, String>();
         String name = Url.get("name").toString();
 
-//        if (name2Ip.containsValue(servletRequest.getRemoteAddr())) { //TODO: enable in the end
-//            return new Connect4(counter.get(), "You can't register since your IP has been registered earlier.");
-//        }
+        if (name2Ip.containsValue(servletRequest.getRemoteAddr())) { //TODO: enable in the end
+            respon.put("message", "You can't register since your IP has been registered earlier.");
+        }
+
         if (counter.get() > 1) {
             respon.put("message", "This game is two player! you should try Play Station 4 instead ;)");
             return respon;
@@ -63,7 +64,7 @@ public class Connect4Controller {
         name2Ip.put(name, servletRequest.getRemoteAddr());
         id2Ip.put((int) counter.get() + 1, servletRequest.getRemoteAddr());
         ip2Id.put(servletRequest.getRemoteAddr(), (int) counter.get());
-        id2Name.put((int) counter.get(),name);
+        id2Name.put((int) counter.get(), name);
         String msg = counter.get() == 0 ? " player one " : " player two";
 
         respon.put("ID", counter.incrementAndGet() + "");
@@ -76,30 +77,31 @@ public class Connect4Controller {
     @RequestMapping(method = RequestMethod.GET, value = "getState")  //http://127.0.0.1:8080/getState
     public JSONObject getCurrentState() {
         Map<String, String> respon = new HashMap<String, String>();
+        Map<String, String> winnerResponse = new HashMap<>();
+        String msg = null;
+        JSONObject jobject = new JSONObject();
 
-//        System.out.println("get state ====> " + loc[0][3]);
+        respon = defineWinner(loc);
+        if (respon.get("message").contains("no")) {  // filter the message to show the continue message incase of no winner
+            msg = " no winner, continue the game, gamer :) ";
+            winnerResponse.put("message", msg);
+            jobject.put("winner", winnerResponse);
+        } else if (respon.get("message").contains("won")) {  // if there is any winner, finish the game and return the winner
+            jobject.put("winner", respon);
+            return jobject;
+        }
 
-//        if (counter.get() == 0) {
-//            isPlayerOneTurn = true;
-//            isPlayerTwoTurn = false;
-//        } else if (counter.get() == 1) {
-//            isPlayerTwoTurn = true;
-//            isPlayerOneTurn = false;
-//
-//        }
-
-       JSONObject jobject = new JSONObject();
-        jobject.put("winner" , defineWinner(loc));
 
 //        System.out.println(" THE WINNER IN -----> " + defineWinner(loc));
 
+
         if (isPlayerOneTurn) {
             respon.put("message: ", " player one turn.");
-            jobject.put("message"," player one turn." );
+            jobject.put("message", " player one turn.");
 //            return respon;
         } else if (isPlayerTwoTurn) {
             respon.put("message", " player two turn");
-            jobject.put("message"," player two turn." );
+            jobject.put("message", " player two turn.");
 //            return respon;
         }
         return jobject;
@@ -141,7 +143,7 @@ public class Connect4Controller {
         }
         for (int y = 0; y <= 2; y++) { //num1
             if ((loc[y][0] == 1) && (loc[y + 1][1] == 1) && (loc[y + 2][2] == 1) && (loc[y + 3][3] == 1)) {
-                resp.put("message", "player one win ;)");
+                resp.put("message", "player one won ;)");
                 return resp;
             } else if ((loc[y][0] == 2) && (loc[y + 1][1] == 2) && (loc[y + 2][2] == 2) && (loc[y + 3][3] == 2)) {
                 resp.put("message", "player two won ;)");
@@ -152,7 +154,7 @@ public class Connect4Controller {
         }
         for (int x = 1; x <= 3; x++) { //num2
             if ((loc[0][x] == 1) && (loc[1][x + 1] == 1) && (loc[2][x + 2] == 1) && (loc[3][x + 3] == 1)) {
-                resp.put("message", "player one win ;)");
+                resp.put("message", "player one won ;)");
                 return resp;
             } else if ((loc[0][x] == 2) && (loc[1][x + 1] == 2) && (loc[2][x + 2] == 2) && (loc[3][x + 3] == 2)) {
                 resp.put("message", "player two won ;)");
@@ -163,7 +165,7 @@ public class Connect4Controller {
         }
         for (int x = 3; x <= 6; x++) { ///num3
             if ((loc[5][x] == 1) && (loc[4][x - 1] == 1) && (loc[3][x - 2] == 1) && (loc[2][x - 3] == 1)) {
-                resp.put("message", "player one win ;)");
+                resp.put("message", "player one won ;)");
                 return resp;
             } else if ((loc[5][x] == 2) && (loc[4][x - 1] == 2) && (loc[3][x - 2] == 2) && (loc[2][x - 3] == 2)) {
                 resp.put("message", "player two won ;)");
@@ -174,7 +176,7 @@ public class Connect4Controller {
         }
         for (int y = 3; y <= 4; y++) { //num4
             if ((loc[y][6] == 1) && (loc[y - 1][5] == 1) && (loc[y - 2][4] == 1) && (loc[y - 3][3] == 1)) {
-                resp.put("message", "player one win ;)");
+                resp.put("message", "player one won ;)");
                 return resp;
             } else if ((loc[y][6] == 2) && (loc[y - 1][5] == 2) && (loc[y - 2][4] == 2) && (loc[y - 3][3] == 2)) {
                 resp.put("message", "player two won ;)");
@@ -185,7 +187,7 @@ public class Connect4Controller {
         }
         for (int x = 3; x <= 6; x++) { //num 5
             if ((loc[0][x] == 1) && (loc[1][x - 1] == 1) && (loc[2][x - 2] == 1) && (loc[3][x - 3] == 1)) {
-                resp.put("message", "player one win ;)");
+                resp.put("message", "player one won ;)");
                 return resp;
             }
             if ((loc[0][x] == 2) && (loc[1][x - 1] == 2) && (loc[2][x - 2] == 2) && (loc[3][x - 3] == 2)) {
@@ -195,41 +197,39 @@ public class Connect4Controller {
                 resp.put("message", " no winner in diagonal num5");
             }
         }
-        for (int y = 1 ; y <=2 ; y++) {  //num6
-            if ((loc[y][6] ==1)&&(loc[y+1][5]==1)&&(loc[y+2][4]==1)&&(loc[y+3][3]==1)){
-                resp.put("message", "player one win ;)");
+        for (int y = 1; y <= 2; y++) {  //num6
+            if ((loc[y][6] == 1) && (loc[y + 1][5] == 1) && (loc[y + 2][4] == 1) && (loc[y + 3][3] == 1)) {
+                resp.put("message", "player one won ;)");
                 return resp;
-            } else if ((loc[y][6] ==2)&&(loc[y+1][5]==2)&&(loc[y+2][4]==2)&&(loc[y+3][3]==2)){
+            } else if ((loc[y][6] == 2) && (loc[y + 1][5] == 2) && (loc[y + 2][4] == 2) && (loc[y + 3][3] == 2)) {
                 resp.put("message", "player two won ;)");
                 return resp;
-            }else {
+            } else {
                 resp.put("message", " no winner in diagonal num6");
             }
         }
-        for (int y = 3; y <=5 ; y++) {  //num7
-            if ((loc[y][0]==1)&&(loc[y-1][1]==1)&&(loc[y-2][2]==1)&&(loc[y-3][3]==1)){
-                resp.put("message", "player one win ;)");
+        for (int y = 3; y <= 5; y++) {  //num7
+            if ((loc[y][0] == 1) && (loc[y - 1][1] == 1) && (loc[y - 2][2] == 1) && (loc[y - 3][3] == 1)) {
+                resp.put("message", "player one won ;)");
                 return resp;
-            } else if ((loc[y][0]==2)&&(loc[y-1][1]==2)&&(loc[y-2][2]==2)&&(loc[y-3][3]==2)) {
+            } else if ((loc[y][0] == 2) && (loc[y - 1][1] == 2) && (loc[y - 2][2] == 2) && (loc[y - 3][3] == 2)) {
                 resp.put("message", "player two won ;)");
                 return resp;
-            }else {
+            } else {
                 resp.put("message", " no winner in diagonal num7");
             }
         }
-        for (int x = 1; x <=3 ; x++) { //num8
-            if ((loc[5][x]==1)&&(loc[4][x+1]==1)&&(loc[3][x+2]==1)&&(loc[2][x=3]==1)){
-                resp.put("message", "player one win ;)");
+        for (int x = 1; x <= 3; x++) { //num8
+            if ((loc[5][x] == 1) && (loc[4][x + 1] == 1) && (loc[3][x + 2] == 1) && (loc[2][x = 3] == 1)) {
+                resp.put("message", "player one won ;)");
                 return resp;
-            } else if ((loc[5][x]==2)&&(loc[4][x+1]==2)&&(loc[3][x+2]==2)&&(loc[2][x=3]==2)) {
+            } else if ((loc[5][x] == 2) && (loc[4][x + 1] == 2) && (loc[3][x + 2] == 2) && (loc[2][x = 3] == 2)) {
                 resp.put("message", "player two won ;)");
                 return resp;
             } else {
                 resp.put("message", " no winner in diagonal num8");
             }
         }
-
-
         return resp;
     }
 
@@ -244,18 +244,18 @@ public class Connect4Controller {
             throw new IndexOutOfBoundsException(" the column number is not in the range 0-6");
         }
 
-//        if (isPlayerOneTurn) {  //TODO: enable it in th end
-//            if (servletRequest.getRemoteAddr().equals(id2Ip.get(2))) {
-//                respon.put("message" , "This is not your turn! its player one turn.");
-//                return respon;
-//            }
-//        }
-//        if (isPlayerTwoTurn) {
-//            if (servletRequest.getRemoteAddr().equals(id2Ip.get(1))) {
-//                respon.put("message" , "This is not your turn! its player two turn.");
-//                return respon;
-//            }
-//        }
+        if (isPlayerOneTurn) {  //TODO: enable it in th end
+            if (servletRequest.getRemoteAddr().equals(id2Ip.get(2))) {
+                respon.put("message", "This is not your turn! its player one turn.");
+                return respon;
+            }
+        }
+        if (isPlayerTwoTurn) {//TODO: enable it in th end
+            if (servletRequest.getRemoteAddr().equals(id2Ip.get(1))) {
+                respon.put("message", "This is not your turn! its player two turn.");
+                return respon;
+            }
+        }
 
         System.out.println("col value: ----> " + Url.get("col"));
         System.out.println("loc[0][3] val is: ===> " + loc[0][3]);
@@ -270,14 +270,29 @@ public class Connect4Controller {
             return respon;
         }
 
+        /**
+         * swith the players
+         */
         if (isPlayerOneTurn) {
+            if (loc[topOFThisColumn][column] != 0) {
+                isPlayerOneTurn = false;  // TODO: enable it later
+                isPlayerTwoTurn = true;   // TODO: enable it later
+                respon.put("message", "overwriting the data is not accepted. you lost your turn.");
+                return respon;
+            }
             loc[topOFThisColumn][column] = 1;
-//            isPlayerOneTurn = false;  // TODO: enable it later
-//            isPlayerTwoTurn = true;
+            isPlayerOneTurn = false;  // TODO: enable it later
+            isPlayerTwoTurn = true;   // TODO: enable it later
         } else if (isPlayerTwoTurn) {
+            if (loc[topOFThisColumn][column] != 0) {
+                isPlayerTwoTurn = false; // TODO: enable it for later
+                isPlayerOneTurn = true;   // TODO: enable it later
+                respon.put("message", "overwriting the data is not accepted. you lost your turn.");
+                return respon;
+            }
             loc[topOFThisColumn][column] = 2;
-//            isPlayerTwoTurn = false;  // TODO: enable it for later
-//            isPlayerOneTurn = true;
+            isPlayerTwoTurn = false;  // TODO: enable it for later
+            isPlayerOneTurn = true;   // TODO: enable it later
         }
         lastMove = column;
         return null;
@@ -305,7 +320,7 @@ public class Connect4Controller {
     public Map<String, String> GetLastTurn() {
         Map<String, String> respon = new HashMap<String, String>();
 
-        if(lastMove == -1)
+        if (lastMove == -1)
             return null;
         respon.put("column: ", Integer.toString(lastMove));
         return respon;
@@ -315,15 +330,13 @@ public class Connect4Controller {
     @RequestMapping(method = RequestMethod.GET, value = "GetName")  //http://127.0.0.1:8080/GetName
     public Map<String, String> GetName(HttpServletRequest servletRequest) {
         Map<String, String> respon = new HashMap<String, String>();
-        Integer id = (Integer)ip2Id.get(servletRequest.getRemoteAddr());
+        Integer id = (Integer) ip2Id.get(servletRequest.getRemoteAddr());
 
-        if(id != null && (id >= 0 && id <= 1))
-        {
-            int oponentId = (id==0?1:0);
-            String oponentName = (String)id2Name.get(oponentId);
-            if(oponentName != null)
-            {
-                respon.put("PlayerName: ",oponentName);
+        if (id != null && (id >= 0 && id <= 1)) {
+            int oponentId = (id == 0 ? 1 : 0);
+            String oponentName = (String) id2Name.get(oponentId);
+            if (oponentName != null) {
+                respon.put("PlayerName: ", oponentName);
                 return respon;
             }
         }

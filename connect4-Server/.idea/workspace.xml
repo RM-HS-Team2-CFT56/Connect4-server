@@ -35,14 +35,13 @@
       <file leaf-file-name="Connect4Controller.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/srv/Connect4Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="880">
-              <caret line="267" column="36" selection-start-line="267" selection-start-column="36" selection-end-line="267" selection-end-column="36" />
+            <state relative-caret-position="3952">
+              <caret line="232" column="0" selection-start-line="232" selection-start-column="0" selection-end-line="232" selection-end-column="0" />
               <folding>
-                <element signature="e#3675#3691#0" expanded="true" />
-                <element signature="method#defineWinner#0;class#Connect4Controller#0" expanded="false" />
-                <element signature="e#11365#11381#0" expanded="true" />
-                <element signature="e#14132#14148#0" expanded="true" />
-                <element signature="e#14630#14646#0" expanded="true" />
+                <element signature="e#3878#3894#0" expanded="true" />
+                <element signature="e#11946#11962#0" expanded="true" />
+                <element signature="e#15480#15496#0" expanded="true" />
+                <element signature="e#15979#15995#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -105,6 +104,25 @@
     <option name="y" value="-14" />
     <option name="width" value="3866" />
     <option name="height" value="2346" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>General</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>Duplicates</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -200,7 +218,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Sigma-project/Connect-server/Connect4-server/connect4-Server/src/main/java/srv/Application.java" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Java" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
   <component name="RunManager" selected="Spring Boot.Application">
@@ -708,12 +726,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1478685037456</updated>
-      <workItem from="1478685038744" duration="52988000" />
+      <workItem from="1478685038744" duration="58766000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="52988000" />
+    <option name="totallyTimeSpent" value="58766000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-3854" y="-14" width="3866" height="2346" extended-state="6" />
@@ -726,7 +744,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29104835" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2508377" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32982287" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -804,14 +822,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/srv/Connect4Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="880">
-          <caret line="267" column="36" selection-start-line="267" selection-start-column="36" selection-end-line="267" selection-end-column="36" />
+        <state relative-caret-position="3952">
+          <caret line="232" column="0" selection-start-line="232" selection-start-column="0" selection-end-line="232" selection-end-column="0" />
           <folding>
-            <element signature="e#3675#3691#0" expanded="true" />
-            <element signature="method#defineWinner#0;class#Connect4Controller#0" expanded="false" />
-            <element signature="e#11365#11381#0" expanded="true" />
-            <element signature="e#14132#14148#0" expanded="true" />
-            <element signature="e#14630#14646#0" expanded="true" />
+            <element signature="e#3878#3894#0" expanded="true" />
+            <element signature="e#11946#11962#0" expanded="true" />
+            <element signature="e#15480#15496#0" expanded="true" />
+            <element signature="e#15979#15995#0" expanded="true" />
           </folding>
         </state>
       </provider>
