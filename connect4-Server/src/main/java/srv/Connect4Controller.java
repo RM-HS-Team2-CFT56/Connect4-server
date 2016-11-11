@@ -2,6 +2,7 @@ package srv;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -16,8 +17,8 @@ public class Connect4Controller {
     private final AtomicLong counter = new AtomicLong();
     private final Map<String, String> name2Ip = new HashMap<>(2);
     private final Map<Integer, String> id2Ip = new HashMap<>(2);
-    private static boolean isPlayerOneTurn = false;
-    private static boolean isPlayerTwoTurn = false;
+    private static boolean isPlayerOneTurn ;
+    private static boolean isPlayerTwoTurn ;
     private int[][] loc = new int[6][7];
 
 //    @RequestMapping("/connect")    //http://127.0.0.1:8080/connect/    or http://127.0.0.1:8080/connect?name=Mahdi //TODO: delete it
@@ -46,6 +47,14 @@ public class Connect4Controller {
 //            return new Connect4(" This game is two player! you should try Play Station 4 instead ;)");
         }
 
+        if (counter.get() == 0) {
+            isPlayerOneTurn = false;
+            isPlayerTwoTurn = true;
+        } else if (counter.get() == 1) {
+            isPlayerTwoTurn = false;
+            isPlayerOneTurn = true;
+        }
+
         name2Ip.put(name, servletRequest.getRemoteAddr());
         id2Ip.put((int) counter.get() + 1, servletRequest.getRemoteAddr());
         String msg = counter.get() == 0 ? " player one " : " player two";
@@ -63,13 +72,14 @@ public class Connect4Controller {
 
 //        System.out.println("get state ====> " + loc[0][3]);
 
-        if (counter.get() == 0) {
-            isPlayerOneTurn = true;
-            isPlayerTwoTurn = false;
-        } else if (counter.get() == 1) {
-            isPlayerTwoTurn = true;
-            isPlayerOneTurn = false;
-        }
+//        if (counter.get() == 0) {
+//            isPlayerOneTurn = true;
+//            isPlayerTwoTurn = false;
+//        } else if (counter.get() == 1) {
+//            isPlayerTwoTurn = true;
+//            isPlayerOneTurn = false;
+//
+//        }
 
 
 
@@ -89,56 +99,38 @@ public class Connect4Controller {
 
         Map<String, String> resp = new HashMap<>();
 
-        outOfLoop:
-        {
+
             for (int y = 0; y <= 5; y++) { // for col0 - col3 ( for first 4 column in the left)
                 for (int x = 0; x <= 3; x++) {
-                    resp.put("message", whoIsWinnerHoriz(x, y, loc).get("message"));
-                   // age message winnero peida karde break kon, vagar na ma be loope dovomi ham niaz darim!
-
-                    break outOfLoop;
+                    if ((loc[y][x] == 1) && (loc[y][x+1] == 1) && (loc[y][x+2] == 1) && (loc[y][x+3] == 1)){
+                        resp.put("message" , " player one won :)");
+                        return resp;
+                    } else if ((loc[y][x] == 2) && (loc[y][x+1] == 2) && (loc[y][x+2] == 2) && (loc[y][x+3] == 2)){
+                        resp.put("message" , " player two won :)");
+                        return resp;
+                    } else {
+                        resp.put("message" , " no winner in horizontal view");
+                    }
                 }
             }
             for (int x = 0; x <= 6; x++) { // for row0 - row2 ( for first 3 row in the bottom)
                 for (int y = 0; y <= 2; y++) {
-                    resp.put("message", whoIsWinnerVert(x, y, loc).get("message"));
-                    break outOfLoop;
+                    if ((loc[y][x] == 1) && (loc[y+1][x] == 1) && (loc[y+2][x] == 1) && (loc[y+3][x] == 1)){
+                        System.out.println("player1 ---------------------------> " + y + ","+ x + "  loc is ==> " + loc[y][x] + " "+loc[y+1][x]+" "+loc[y+2][x]+" " +loc[y+3][x]);
+                        resp.put("message" , " player one won :)");
+                        return resp;
+                    }else if ((loc[y][x] == 2) && (loc[y+1][x] == 2) && (loc[y+2][x] == 2) && (loc[y+3][x] == 2)){
+                        System.out.println("player2 ---------------------------> "+ y + ","+ x + "  loc is ==> " + loc[y][x] + " "+loc[y+1][x]+" "+loc[y+2][x]+" " +loc[y+3][x]);
+                        resp.put("message" , " player two won :)");
+                        return resp;
+                    } else {
+                        resp.put("message" , " no winner in vertical view");
+                    }
                 }
             }
-        }
-        return resp;
-    }
-    //--------------------------------------------------------------------------------------------------------
-    private Map<String, String> whoIsWinnerHoriz(int x, int y, int[][] loc) { //x:0-3 , y:0-5
-        Map<String, String> resp = new HashMap<>();
-        if ((loc[y][x] == 1) && (loc[y][x+1] == 1) && (loc[y][x+2] == 1) && (loc[y][x+3] == 1)){
-            resp.put("message" , " player one won :)");
-            return resp;
-        }
-        if ((loc[y][x] == 2) && (loc[y][x+1] == 2) && (loc[y][x+2] == 2) && (loc[y][x+3] == 2)){
-            resp.put("message" , " player two won :)");
-            return resp;
-        }
-        resp.put("message" , " no winner in horizontal view");
         return resp;
     }
 
-    //--------------------------------------------------------------------------------------------------------
-    private Map<String,String> whoIsWinnerVert(int x, int y, int[][] loc) {
-        Map<String, String> resp = new HashMap<>();
-        if ((loc[y][x] == 1) && (loc[y+1][x] == 1) && (loc[y+2][x] == 1) && (loc[y+3][x] == 1)){
-            System.out.println("AVALI ---------------------------> " + y + ","+ x + "  loc is ==> " + loc[y][x] + " "+loc[y+1][x]+" "+loc[y+2][x]+" " +loc[y+3][x]);
-            resp.put("message" , " player one won :)");
-            return resp;
-        }
-        if ((loc[y][x] == 2) && (loc[y+1][x] == 2) && (loc[y+2][x] == 2) && (loc[y+3][x] == 2)){
-            System.out.println("DOVOMI ---------------------------> "+ y + ","+ x + "  loc is ==> " + loc[y][x] + " "+loc[y+1][x]+" "+loc[y+2][x]+" " +loc[y+3][x]);
-            resp.put("message" , " player two won :)");
-            return resp;
-        }
-        resp.put("message" , " no winner in vertical view ");
-        return resp;
-    }
     //--------------------------------------------------------------------------------------------------------
     @RequestMapping(method = RequestMethod.POST, value = "enterDisc")  // http://127.0.0.1:8080/connect2Server
     public Map<String, String> enterTheDisk(@RequestBody Map<String, Object> Url, HttpServletRequest servletRequest) {
