@@ -2,7 +2,6 @@ package srv;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -61,25 +60,16 @@ public class Connect4Controller {
         respon.put("connected", Boolean.TRUE);
         respon.put("message", " Hi " + name + ", you connected successfully! You are " + msg);
         return respon;
-//        return new Connect4(counter.incrementAndGet(), "Hej " + name + ", you are " + msg);
     }
 
     //--------------------------------------------------------------------------------------------------------
     @RequestMapping(method = RequestMethod.GET, value = "getState")  //http://127.0.0.1:8080/getState
     public JSONObject getCurrentState(HttpServletRequest servletRequest) {
         Map<String, String> respon = new HashMap<String, String>();
-        Map<String, String> winnerResponse = new HashMap<>();
-        String msg = null;
         JSONObject jobject = new JSONObject();
-
         respon = defineWinner(loc);
-//        if (respon.get("message").contains("no")) {  // filter the message to show the continue message incase of no winner
-//            msg = " no winner, continue the game, gamer :) ";
-//            winnerResponse.put("message", msg);
-//            jobject.put("winner", winnerResponse);
-//        } else
+
         if (respon.get("message").contains("one won")) {  // if there is any winner, finish the game and return the winner
-//            jobject.put("winner", respon);
             jobject.put("State", "WON");
             jobject.put("message", "player one won!");
             return jobject;
@@ -88,33 +78,23 @@ public class Connect4Controller {
             jobject.put("message", "player two won!");
             return jobject;
         }
-
-
 /*
  * save the ip of requester
  */
         String playerOneIP = id2Ip.get(1);
         String playerTwoIP = id2Ip.get(2);
 
-
-
-
         if (id2Ip.size() == 0) {    // this message will be generated before player one and player two register.
-            jobject.put("State" , "WAITING_FOR_PLAYER");
-            jobject.put("message" , " Server is waiting for player one and player two to register.");
+            jobject.put("State", "WAITING_FOR_PLAYER");
+            jobject.put("message", " Server is waiting for player one and player two to register.");
             return jobject;
         }
 
-
-        System.out.println(" -------------> " + playerOneIP + "   " + (playerTwoIP != null) + "         size:" + id2Ip.size() + "  " + id2Ip.get(1).equals(playerOneIP) + " ====> " + playerTwoIP.equals(String.valueOf(servletRequest))
-         + "   " + playerTwoIP + "  ===> " + servletRequest.getRemoteAddr());
-
-        if ((id2Ip.size() ==1) && (id2Ip.get(1).equals(playerOneIP))) {
-            jobject.put("State" , "WAITING_FOR_PLAYER");
-            jobject.put("message" , "Waiting for player two! The ip of player two is not registred on the server yet!");
+        if ((id2Ip.size() == 1) && (id2Ip.get(1).equals(playerOneIP))) {
+            jobject.put("State", "WAITING_FOR_PLAYER");
+            jobject.put("message", "Waiting for player two! The ip of player two is not registred on the server yet!");
             return jobject;
         }
-
 
         if ((playerOneIP != null) && (playerOneIP.equals(String.valueOf(servletRequest.getRemoteAddr()))) && (isPlayerOneTurn)) {  //if its player one's request and player one's turn:
             jobject.put("State", "YOUR_TURN");
@@ -129,24 +109,18 @@ public class Connect4Controller {
             jobject.put("State", "OPPONENTS_TURN");
             jobject.put("message", "It is player 1's turn.");
         }
-
-//        if (isPlayerOneTurn) {
-////            respon.put("message: ", "It is player 1's turn.");
-//            jobject.put("message", "It is player 1's turn.");
-////            return respon;
-//        } else if (isPlayerTwoTurn) {
-////            respon.put("message", "It is player 2's turn");
-//            jobject.put("message", "It is player 2's turn.");
-////            return respon;
-//        }
         return jobject;
     }
 
     //--------------------------------------------------------------------------------------------------------
+
+    /**
+     * this method will return the winner.
+     * @param loc
+     * @return Map
+     */
     private Map<String, String> defineWinner(int[][] loc) {
-
         Map<String, String> resp = new HashMap<>();
-
 
         for (int y = 0; y <= 5; y++) { // for col0 - col3 ( for first 4 column in the left)
             for (int x = 0; x <= 3; x++) {
@@ -164,11 +138,9 @@ public class Connect4Controller {
         for (int x = 0; x <= 6; x++) { // for row0 - row2 ( for first 3 row in the bottom)
             for (int y = 0; y <= 2; y++) {
                 if ((loc[y][x] == 1) && (loc[y + 1][x] == 1) && (loc[y + 2][x] == 1) && (loc[y + 3][x] == 1)) {
-                    System.out.println("player1 ---------------------------> " + y + "," + x + "  loc is ==> " + loc[y][x] + " " + loc[y + 1][x] + " " + loc[y + 2][x] + " " + loc[y + 3][x]);
                     resp.put("message", " player one won :)");
                     return resp;
                 } else if ((loc[y][x] == 2) && (loc[y + 1][x] == 2) && (loc[y + 2][x] == 2) && (loc[y + 3][x] == 2)) {
-                    System.out.println("player2 ---------------------------> " + y + "," + x + "  loc is ==> " + loc[y][x] + " " + loc[y + 1][x] + " " + loc[y + 2][x] + " " + loc[y + 3][x]);
                     resp.put("message", " player two won :)");
                     return resp;
                 } else {
@@ -292,15 +264,16 @@ public class Connect4Controller {
             }
         }
 
-        System.out.println("col value: ----> " + Url.get("col"));
-        System.out.println("loc[0][3] val is: ===> " + loc[0][3]);
-        System.out.println("loc[1][3] val is: ===> " + loc[1][3]);
-        System.out.println("loc[2][3] val is: ===> " + loc[2][3]);
-        System.out.println("loc[3][3] val is: ===> " + loc[3][3]);
+//        System.out.println("col value: ----> " + Url.get("col"));
+//        System.out.println("loc[0][3] val is: ===> " + loc[0][3]);
+//        System.out.println("loc[1][3] val is: ===> " + loc[1][3]);
+//        System.out.println("loc[2][3] val is: ===> " + loc[2][3]);
+//        System.out.println("loc[3][3] val is: ===> " + loc[3][3]);
 
         topOFThisColumn = topOfColumn(column);
 
         if (topOFThisColumn == 10) {
+            respon.put("Status", "NOT");
             respon.put("message", " The column is already full or client is trying to overwrite the location!");
             return respon;
         }
@@ -312,29 +285,39 @@ public class Connect4Controller {
             if (loc[topOFThisColumn][column] != 0) {
                 isPlayerOneTurn = false;  // TODO: enable it later
                 isPlayerTwoTurn = true;   // TODO: enable it later
+                respon.put("Status", "NOT");
                 respon.put("message", "overwriting the data is not accepted. you lost your turn.");
                 return respon;
             }
             loc[topOFThisColumn][column] = 1;
             isPlayerOneTurn = false;  // TODO: enable it later
             isPlayerTwoTurn = true;   // TODO: enable it later
+            respon.put("Status", "OK");
         } else if (isPlayerTwoTurn) {
             if (loc[topOFThisColumn][column] != 0) {
                 isPlayerTwoTurn = false; // TODO: enable it for later
                 isPlayerOneTurn = true;   // TODO: enable it later
+                respon.put("Status", "NOT");
                 respon.put("message", "overwriting the data is not accepted. you lost your turn.");
                 return respon;
             }
             loc[topOFThisColumn][column] = 2;
             isPlayerTwoTurn = false;  // TODO: enable it for later
             isPlayerOneTurn = true;   // TODO: enable it later
+            respon.put("Status", "OK");
         }
         lastMove = column;
         respon.put("message", "Disc entered");
-        return null;
+        return respon;
     }
 
     //--------------------------------------------------------------------------------------------------------
+
+    /**
+     * this methos will return the location of top of entry column
+     * @param column
+     * @return
+     */
     private int topOfColumn(int column) {
         int topIs = 0;  // if the column getting ful (means loc is not ==0 anymore), it will skip bottom for-loop and return 0 !
 
@@ -380,6 +363,17 @@ public class Connect4Controller {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 //    @RequestMapping("/connect")    //http://127.0.0.1:8080/connect/    or http://127.0.0.1:8080/connect?name=Mahdi //TODO: delete it
