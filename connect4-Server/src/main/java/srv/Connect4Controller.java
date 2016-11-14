@@ -1,31 +1,34 @@
 package srv;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.json.simple.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 public class Connect4Controller {
 
+    private final static Logger LOG = LoggerFactory.getLogger(Connect4Controller.class);
+
+    private static boolean isPlayerOneTurn;
+    private static boolean isPlayerTwoTurn;
+    private static boolean gameFinished = false;
     private final AtomicLong counter = new AtomicLong();
     private final Map<String, String> name2Ip = new HashMap<>(2);
     private final Map<Integer, String> id2Ip = new HashMap<>(2);
     private final Map<Integer, String> id2Name = new HashMap<>(2);
     private final Map<String, Integer> ip2Id = new HashMap<>(2);
-    private static boolean isPlayerOneTurn;
-    private static boolean isPlayerTwoTurn;
     private int[][] loc = new int[6][7];
     private int lastMove = -1;
-    private static boolean gameFinished = false;
     //--------------------------------------------------------------------------------------------------------
-
 
     @RequestMapping(method = RequestMethod.POST, value = "Connect")  // http://127.0.0.1:8080/connect2Server
     public Map<String, Object> connectionHandler(@RequestBody Map<String, Object> Url, HttpServletRequest servletRequest) {
@@ -71,6 +74,7 @@ public class Connect4Controller {
     //--------------------------------------------------------------------------------------------------------
     @RequestMapping(method = RequestMethod.GET, value = "getState")  //http://127.0.0.1:8080/getState
     public JSONObject getCurrentState(HttpServletRequest servletRequest) {
+        String usersIp = servletRequest.getRemoteAddr();
         Map<String, String> respon = new HashMap<String, String>();
         JSONObject jobject = new JSONObject();
         if (gameFinished) {
@@ -78,16 +82,34 @@ public class Connect4Controller {
         } else {
             respon = defineWinner(loc);
 
+            for (Integer s : id2Ip.keySet()) {
+                LOG.info("Entry {}:{}", s, id2Ip.get(s));
+            }
+
             if (respon.get("message").contains("one won")) {  // if there is any winner, finish the game and return the winner
-                jobject.put("state", "WON");
-                jobject.put("message", "player one won!");
-                gameFinished = true;
+                if (id2Ip.get(1).equals(usersIp)) {
+                    jobject.put("state", "WON");
+                    jobject.put("message", "player one won!");
+//                    gameFinished = true;
+                } else {
+                    jobject.put("state", "LOST");
+                    jobject.put("message", "Sorry, player two lost:(");
+//                    gameFinished = true;
+                }
+
                 return jobject;
             } else if (respon.get("message").contains("two won")) {
-                jobject.put("state", "WON");
-                jobject.put("message", "player two won!");
-                gameFinished = true;
+                if (id2Ip.get(2).equals(usersIp)) {
+                    jobject.put("state", "WON");
+                    jobject.put("message", "player two won!");
+//                    gameFinished = true;
+                } else {
+                    jobject.put("state", "LOST");
+                    jobject.put("message", "Sorry, player one lost:(");
+//                    gameFinished = true;
+                }
                 return jobject;
+
             }
 /*
  * save the ip of requester
@@ -262,7 +284,7 @@ public class Connect4Controller {
         if (gameFinished) {
             respon.put("message", "The game is over mate :) , enter the coin and restart the server!");
         } else {
-            int column = Integer.valueOf(Url.get("col").toString());
+            int column = Integer.valueOf(Url.get("column").toString());
 
             if (column > 6) {
                 throw new IndexOutOfBoundsException(" the column number is not in the range 0-6");
@@ -351,14 +373,14 @@ public class Connect4Controller {
 //--------------------------------------------------------------------------------------------------------
 
     @RequestMapping(method = RequestMethod.GET, value = "GetLastTurn")  //http://127.0.0.1:8080/GetLastTurn
-    public Map<String, String> GetLastTurn() {
-        Map<String, String> respon = new HashMap<String, String>();
+    public Map<String, Object> GetLastTurn() {
+        Map<String, Object> respon = new HashMap<String, Object>();
         if (gameFinished) {
             respon.put("message", "The game is over mate :) , enter the coin and restart the server!");
         } else {
             if (lastMove == -1)
                 return null;
-            respon.put("column: ", Integer.toString(lastMove));
+            respon.put("column", lastMove);
         }
         return respon;
     }
@@ -376,7 +398,7 @@ public class Connect4Controller {
                 int oponentId = (id == 0 ? 1 : 0);
                 String oponentName = (String) id2Name.get(oponentId);
                 if (oponentName != null) {
-                    respon.put("playerName: ", oponentName);
+                    respon.put("playerName", oponentName);
                     return respon;
                 }
             }
