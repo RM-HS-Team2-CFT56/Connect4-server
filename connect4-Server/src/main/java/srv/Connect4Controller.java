@@ -23,6 +23,7 @@ public class Connect4Controller {
     private static boolean isPlayerTwoTurn;
     private int[][] loc = new int[6][7];
     private int lastMove = -1;
+    private static boolean gameFinished = false;
     //--------------------------------------------------------------------------------------------------------
 
 
@@ -31,35 +32,40 @@ public class Connect4Controller {
         Map<String, Object> respon = new HashMap<String, Object>();
         String name = Url.get("PlayerName").toString();
 
-        if (name2Ip.containsValue(servletRequest.getRemoteAddr())) { //TODO: enable in the end
-            respon.put("message", "You can't register since your IP has been registered earlier.");
-            return respon;
+        if (gameFinished) {
+            respon.put("message", "The game is over mate :) , enter the coin and restart the server!");
+        } else {
+            if (name2Ip.containsValue(servletRequest.getRemoteAddr())) { //TODO: enable in the end
+                respon.put("message", "You can't register since your IP has been registered earlier.");
+                return respon;
+            }
+
+            if (counter.get() > 1) {
+                respon.put("message", "This game is two player! you should try Play Station 4 instead ;)");
+                return respon;
+            }
+
+            if (counter.get() == 0) {
+                isPlayerOneTurn = false;
+                isPlayerTwoTurn = true;
+            } else if (counter.get() == 1) {
+                isPlayerTwoTurn = false;
+                isPlayerOneTurn = true;
+            }
+
+            name2Ip.put(name, servletRequest.getRemoteAddr());
+            id2Ip.put((int) counter.get() + 1, servletRequest.getRemoteAddr());
+            ip2Id.put(servletRequest.getRemoteAddr(), (int) counter.get());
+            id2Name.put((int) counter.get(), name);
+            String msg = counter.get() == 0 ? " player one " : " player two";
+
+
+            respon.put("ID", counter.incrementAndGet());
+            respon.put("connected", Boolean.TRUE);
+            respon.put("message", " Hi " + name + ", you connected successfully! You are " + msg);
         }
-
-        if (counter.get() > 1) {
-            respon.put("message", "This game is two player! you should try Play Station 4 instead ;)");
-            return respon;
-        }
-
-        if (counter.get() == 0) {
-            isPlayerOneTurn = false;
-            isPlayerTwoTurn = true;
-        } else if (counter.get() == 1) {
-            isPlayerTwoTurn = false;
-            isPlayerOneTurn = true;
-        }
-
-        name2Ip.put(name, servletRequest.getRemoteAddr());
-        id2Ip.put((int) counter.get() + 1, servletRequest.getRemoteAddr());
-        ip2Id.put(servletRequest.getRemoteAddr(), (int) counter.get());
-        id2Name.put((int) counter.get(), name);
-        String msg = counter.get() == 0 ? " player one " : " player two";
-
-
-        respon.put("ID", counter.incrementAndGet());
-        respon.put("connected", Boolean.TRUE);
-        respon.put("message", " Hi " + name + ", you connected successfully! You are " + msg);
         return respon;
+
     }
 
     //--------------------------------------------------------------------------------------------------------
@@ -67,55 +73,62 @@ public class Connect4Controller {
     public JSONObject getCurrentState(HttpServletRequest servletRequest) {
         Map<String, String> respon = new HashMap<String, String>();
         JSONObject jobject = new JSONObject();
-        respon = defineWinner(loc);
+        if (gameFinished) {
+            respon.put("message", "The game is over mate :) , enter the coin and restart the server!");
+        } else {
+            respon = defineWinner(loc);
 
-        if (respon.get("message").contains("one won")) {  // if there is any winner, finish the game and return the winner
-            jobject.put("State", "WON");
-            jobject.put("message", "player one won!");
-            return jobject;
-        } else if (respon.get("message").contains("two won")) {
-            jobject.put("State", "WON");
-            jobject.put("message", "player two won!");
-            return jobject;
-        }
+            if (respon.get("message").contains("one won")) {  // if there is any winner, finish the game and return the winner
+                jobject.put("State", "WON");
+                jobject.put("message", "player one won!");
+                gameFinished = true;
+                return jobject;
+            } else if (respon.get("message").contains("two won")) {
+                jobject.put("State", "WON");
+                jobject.put("message", "player two won!");
+                gameFinished = true;
+                return jobject;
+            }
 /*
  * save the ip of requester
  */
-        String playerOneIP = id2Ip.get(1);
-        String playerTwoIP = id2Ip.get(2);
+            String playerOneIP = id2Ip.get(1);
+            String playerTwoIP = id2Ip.get(2);
 
-        if (id2Ip.size() == 0) {    // this message will be generated before player one and player two register.
-            jobject.put("State", "WAITING_FOR_PLAYER");
-            jobject.put("message", " Server is waiting for player one and player two to register.");
-            return jobject;
-        }
+            if (id2Ip.size() == 0) {    // this message will be generated before player one and player two register.
+                jobject.put("State", "WAITING_FOR_PLAYER");
+                jobject.put("message", " Server is waiting for player one and player two to register.");
+                return jobject;
+            }
 
-        if ((id2Ip.size() == 1) && (id2Ip.get(1).equals(playerOneIP))) {
-            jobject.put("State", "WAITING_FOR_PLAYER");
-            jobject.put("message", "Waiting for player two! The ip of player two is not registred on the server yet!");
-            return jobject;
-        }
+            if ((id2Ip.size() == 1) && (id2Ip.get(1).equals(playerOneIP))) {
+                jobject.put("State", "WAITING_FOR_PLAYER");
+                jobject.put("message", "Waiting for player two! The ip of player two is not registred on the server yet!");
+                return jobject;
+            }
 
-        if ((playerOneIP != null) && (playerOneIP.equals(String.valueOf(servletRequest.getRemoteAddr()))) && (isPlayerOneTurn)) {  //if its player one's request and player one's turn:
-            jobject.put("State", "YOUR_TURN");
-            jobject.put("message", "It is player 1's turn.");
-        } else if ((playerOneIP != null) && (playerOneIP.equals(String.valueOf(servletRequest.getRemoteAddr()))) && (isPlayerTwoTurn)) {//if its player one's request and player two's turn:
-            jobject.put("State", "OPPONENTS_TURN");
-            jobject.put("message", "It is player 2's turn.");
-        } else if ((playerTwoIP != null) && (playerTwoIP.equals(String.valueOf(servletRequest.getRemoteAddr()))) && (isPlayerTwoTurn)) {//if its player two's request and player one's turn:
-            jobject.put("State", "YOUR_TURN");
-            jobject.put("message", "It is player 2's turn.");
-        } else if ((playerTwoIP != null) && (playerTwoIP.equals(String.valueOf(servletRequest.getRemoteAddr()))) && (isPlayerOneTurn)) {//if its player one's request and player one's turn:
-            jobject.put("State", "OPPONENTS_TURN");
-            jobject.put("message", "It is player 1's turn.");
+            if ((playerOneIP != null) && (playerOneIP.equals(String.valueOf(servletRequest.getRemoteAddr()))) && (isPlayerOneTurn)) {  //if its player one's request and player one's turn:
+                jobject.put("State", "YOUR_TURN");
+                jobject.put("message", "It is player 1's turn.");
+            } else if ((playerOneIP != null) && (playerOneIP.equals(String.valueOf(servletRequest.getRemoteAddr()))) && (isPlayerTwoTurn)) {//if its player one's request and player two's turn:
+                jobject.put("State", "OPPONENTS_TURN");
+                jobject.put("message", "It is player 2's turn.");
+            } else if ((playerTwoIP != null) && (playerTwoIP.equals(String.valueOf(servletRequest.getRemoteAddr()))) && (isPlayerTwoTurn)) {//if its player two's request and player one's turn:
+                jobject.put("State", "YOUR_TURN");
+                jobject.put("message", "It is player 2's turn.");
+            } else if ((playerTwoIP != null) && (playerTwoIP.equals(String.valueOf(servletRequest.getRemoteAddr()))) && (isPlayerOneTurn)) {//if its player one's request and player one's turn:
+                jobject.put("State", "OPPONENTS_TURN");
+                jobject.put("message", "It is player 1's turn.");
+            }
         }
         return jobject;
-    }
 
+    }
     //--------------------------------------------------------------------------------------------------------
 
     /**
      * this method will return the winner.
+     *
      * @param loc
      * @return Map
      */
@@ -245,76 +258,77 @@ public class Connect4Controller {
     public Map<String, String> enterTheDisk(@RequestBody Map<String, Object> Url, HttpServletRequest servletRequest) {
         int topOFThisColumn;
         Map<String, String> respon = new HashMap<String, String>();
-        int column = Integer.valueOf(Url.get("col").toString());
 
-        if (column > 6) {
-            throw new IndexOutOfBoundsException(" the column number is not in the range 0-6");
-        }
+        if (gameFinished) {
+            respon.put("message", "The game is over mate :) , enter the coin and restart the server!");
+        } else {
+            int column = Integer.valueOf(Url.get("col").toString());
 
-        if (isPlayerOneTurn) {  //TODO: enable it in th end
-            if (servletRequest.getRemoteAddr().equals(id2Ip.get(2))) {
-                respon.put("message", "This is not your turn! its player one turn.");
+            if (column > 6) {
+                throw new IndexOutOfBoundsException(" the column number is not in the range 0-6");
+            }
+
+            if (isPlayerOneTurn) {  //TODO: enable it in th end
+                if (servletRequest.getRemoteAddr().equals(id2Ip.get(2))) {
+                    respon.put("message", "This is not your turn! its player one turn.");
+                    return respon;
+                }
+            }
+            if (isPlayerTwoTurn) {//TODO: enable it in th end
+                if (servletRequest.getRemoteAddr().equals(id2Ip.get(1))) {
+                    respon.put("message", "This is not your turn! its player two turn.");
+                    return respon;
+                }
+            }
+
+            topOFThisColumn = topOfColumn(column);
+
+            if (topOFThisColumn == 10) {
+                respon.put("Status", "NOT");
+                respon.put("message", " The column is already full or client is trying to overwrite the location!");
                 return respon;
             }
-        }
-        if (isPlayerTwoTurn) {//TODO: enable it in th end
-            if (servletRequest.getRemoteAddr().equals(id2Ip.get(1))) {
-                respon.put("message", "This is not your turn! its player two turn.");
-                return respon;
-            }
-        }
 
-//        System.out.println("col value: ----> " + Url.get("col"));
-//        System.out.println("loc[0][3] val is: ===> " + loc[0][3]);
-//        System.out.println("loc[1][3] val is: ===> " + loc[1][3]);
-//        System.out.println("loc[2][3] val is: ===> " + loc[2][3]);
-//        System.out.println("loc[3][3] val is: ===> " + loc[3][3]);
-
-        topOFThisColumn = topOfColumn(column);
-
-        if (topOFThisColumn == 10) {
-            respon.put("Status", "NOT");
-            respon.put("message", " The column is already full or client is trying to overwrite the location!");
-            return respon;
-        }
-
-        /**
-         * swith the players
-         */
-        if (isPlayerOneTurn) {
-            if (loc[topOFThisColumn][column] != 0) {
+            /**
+             * swith the players
+             */
+            if (isPlayerOneTurn) {
+                if (loc[topOFThisColumn][column] != 0) {
+                    isPlayerOneTurn = false;  // TODO: enable it later
+                    isPlayerTwoTurn = true;   // TODO: enable it later
+                    respon.put("Status", "NOT");
+                    respon.put("message", "overwriting the data is not accepted. you lost your turn.");
+                    return respon;
+                }
+                loc[topOFThisColumn][column] = 1;
                 isPlayerOneTurn = false;  // TODO: enable it later
                 isPlayerTwoTurn = true;   // TODO: enable it later
-                respon.put("Status", "NOT");
-                respon.put("message", "overwriting the data is not accepted. you lost your turn.");
-                return respon;
-            }
-            loc[topOFThisColumn][column] = 1;
-            isPlayerOneTurn = false;  // TODO: enable it later
-            isPlayerTwoTurn = true;   // TODO: enable it later
-            respon.put("Status", "OK");
-        } else if (isPlayerTwoTurn) {
-            if (loc[topOFThisColumn][column] != 0) {
-                isPlayerTwoTurn = false; // TODO: enable it for later
+                respon.put("Status", "OK");
+            } else if (isPlayerTwoTurn) {
+                if (loc[topOFThisColumn][column] != 0) {
+                    isPlayerTwoTurn = false; // TODO: enable it for later
+                    isPlayerOneTurn = true;   // TODO: enable it later
+                    respon.put("Status", "NOT");
+                    respon.put("message", "overwriting the data is not accepted. you lost your turn.");
+                    return respon;
+                }
+                loc[topOFThisColumn][column] = 2;
+                isPlayerTwoTurn = false;  // TODO: enable it for later
                 isPlayerOneTurn = true;   // TODO: enable it later
-                respon.put("Status", "NOT");
-                respon.put("message", "overwriting the data is not accepted. you lost your turn.");
-                return respon;
+                respon.put("Status", "OK");
             }
-            loc[topOFThisColumn][column] = 2;
-            isPlayerTwoTurn = false;  // TODO: enable it for later
-            isPlayerOneTurn = true;   // TODO: enable it later
-            respon.put("Status", "OK");
+            lastMove = column;
+            respon.put("message", "Disc entered");
         }
-        lastMove = column;
-        respon.put("message", "Disc entered");
         return respon;
+
     }
 
     //--------------------------------------------------------------------------------------------------------
 
     /**
      * this methos will return the location of top of entry column
+     *
      * @param column
      * @return
      */
@@ -330,7 +344,6 @@ public class Connect4Controller {
                 break;
             }
         }
-        System.out.println("top is: ----> " + "top ine: " + topIs);
         return topIs;
     }
 //--------------------------------------------------------------------------------------------------------
@@ -338,10 +351,13 @@ public class Connect4Controller {
     @RequestMapping(method = RequestMethod.GET, value = "GetLastTurn")  //http://127.0.0.1:8080/GetLastTurn
     public Map<String, String> GetLastTurn() {
         Map<String, String> respon = new HashMap<String, String>();
-
-        if (lastMove == -1)
-            return null;
-        respon.put("column: ", Integer.toString(lastMove));
+        if (gameFinished) {
+            respon.put("message", "The game is over mate :) , enter the coin and restart the server!");
+        } else {
+            if (lastMove == -1)
+                return null;
+            respon.put("column: ", Integer.toString(lastMove));
+        }
         return respon;
     }
 
@@ -349,31 +365,23 @@ public class Connect4Controller {
     @RequestMapping(method = RequestMethod.GET, value = "GetName")  //http://127.0.0.1:8080/GetName
     public Map<String, String> GetName(HttpServletRequest servletRequest) {
         Map<String, String> respon = new HashMap<String, String>();
-        Integer id = (Integer) ip2Id.get(servletRequest.getRemoteAddr());
+        if (gameFinished) {
+            respon.put("message", "The game is over mate :) , enter the coin and restart the server!");
+        } else {
+            Integer id = (Integer) ip2Id.get(servletRequest.getRemoteAddr());
 
-        if (id != null && (id >= 0 && id <= 1)) {
-            int oponentId = (id == 0 ? 1 : 0);
-            String oponentName = (String) id2Name.get(oponentId);
-            if (oponentName != null) {
-                respon.put("PlayerName: ", oponentName);
-                return respon;
+            if (id != null && (id >= 0 && id <= 1)) {
+                int oponentId = (id == 0 ? 1 : 0);
+                String oponentName = (String) id2Name.get(oponentId);
+                if (oponentName != null) {
+                    respon.put("PlayerName: ", oponentName);
+                    return respon;
+                }
             }
         }
         return null;
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 //    @RequestMapping("/connect")    //http://127.0.0.1:8080/connect/    or http://127.0.0.1:8080/connect?name=Mahdi //TODO: delete it
