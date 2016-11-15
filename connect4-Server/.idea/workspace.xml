@@ -35,15 +35,14 @@
       <file leaf-file-name="Connect4Controller.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/srv/Connect4Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="80" column="27" selection-start-line="80" selection-start-column="27" selection-end-line="80" selection-end-column="27" />
+            <state relative-caret-position="-1080">
+              <caret line="56" column="75" selection-start-line="56" selection-start-column="75" selection-end-line="56" selection-end-column="75" />
               <folding>
-                <element signature="imports" expanded="true" />
                 <element signature="e#1582#1598#0" expanded="true" />
                 <element signature="e#3250#3266#0" expanded="true" />
-                <element signature="e#13367#13383#0" expanded="true" />
-                <element signature="e#17237#17253#0" expanded="true" />
-                <element signature="e#17717#17733#0" expanded="true" />
+                <element signature="e#13909#13925#0" expanded="true" />
+                <element signature="e#17777#17793#0" expanded="true" />
+                <element signature="e#18257#18273#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -92,10 +91,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-3853" />
+    <option name="x" value="-13" />
     <option name="y" value="-13" />
-    <option name="width" value="3866" />
-    <option name="height" value="2346" />
+    <option name="width" value="2586" />
+    <option name="height" value="1386" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -691,15 +690,15 @@
       <workItem from="1478685038744" duration="58870000" />
       <workItem from="1479046354272" duration="1439000" />
       <workItem from="1479110661942" duration="18103000" />
-      <workItem from="1479139302644" duration="4949000" />
+      <workItem from="1479139302644" duration="11811000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="83361000" />
+    <option name="totallyTimeSpent" value="90223000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-3853" y="-13" width="3866" height="2346" extended-state="6" />
+    <frame x="-13" y="-13" width="2586" height="1386" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -710,12 +709,12 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26950693" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.52878654" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32982287" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.124200426" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18851133" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -766,12 +765,11 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
             <element signature="e#1582#1598#0" expanded="true" />
             <element signature="e#3250#3266#0" expanded="true" />
-            <element signature="e#13367#13383#0" expanded="true" />
-            <element signature="e#17237#17253#0" expanded="true" />
-            <element signature="e#17717#17733#0" expanded="true" />
+            <element signature="e#13909#13925#0" expanded="true" />
+            <element signature="e#17777#17793#0" expanded="true" />
+            <element signature="e#18257#18273#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -789,12 +787,11 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
             <element signature="e#1582#1598#0" expanded="true" />
             <element signature="e#3250#3266#0" expanded="true" />
-            <element signature="e#13367#13383#0" expanded="true" />
-            <element signature="e#17237#17253#0" expanded="true" />
-            <element signature="e#17717#17733#0" expanded="true" />
+            <element signature="e#13909#13925#0" expanded="true" />
+            <element signature="e#17777#17793#0" expanded="true" />
+            <element signature="e#18257#18273#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -813,12 +810,11 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
             <element signature="e#1582#1598#0" expanded="true" />
             <element signature="e#3250#3266#0" expanded="true" />
-            <element signature="e#13367#13383#0" expanded="true" />
-            <element signature="e#17237#17253#0" expanded="true" />
-            <element signature="e#17717#17733#0" expanded="true" />
+            <element signature="e#13909#13925#0" expanded="true" />
+            <element signature="e#17777#17793#0" expanded="true" />
+            <element signature="e#18257#18273#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -851,15 +847,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/srv/Connect4Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="80" column="27" selection-start-line="80" selection-start-column="27" selection-end-line="80" selection-end-column="27" />
+        <state relative-caret-position="-1080">
+          <caret line="56" column="75" selection-start-line="56" selection-start-column="75" selection-end-line="56" selection-end-column="75" />
           <folding>
-            <element signature="imports" expanded="true" />
             <element signature="e#1582#1598#0" expanded="true" />
             <element signature="e#3250#3266#0" expanded="true" />
-            <element signature="e#13367#13383#0" expanded="true" />
-            <element signature="e#17237#17253#0" expanded="true" />
-            <element signature="e#17717#17733#0" expanded="true" />
+            <element signature="e#13909#13925#0" expanded="true" />
+            <element signature="e#17777#17793#0" expanded="true" />
+            <element signature="e#18257#18273#0" expanded="true" />
           </folding>
         </state>
       </provider>

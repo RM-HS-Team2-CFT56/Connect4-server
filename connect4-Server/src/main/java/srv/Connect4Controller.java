@@ -75,33 +75,35 @@ public class Connect4Controller {
         Map<String, String> respon = new HashMap<String, String>();
         JSONObject jobject = new JSONObject();
 
-        if (isTheGameDraw(loc)) {
+        respon = defineWinner(loc);
+
+        if (boardIsFull(loc) && (! respon.get("message").contains("two won")) && (! respon.get("message").contains("one won")) ) {
             jobject.put("state", "DRAW");
             jobject.put("message" , " player 3 in the winner :) !!!!");
             return jobject;
         }
-        respon = defineWinner(loc);
 
         if (respon.get("message").contains("one won")) {  // if there is any winner, finish the game and return the winner
-            if (id2Ip.get(1).equals(usersIp)) {
-                jobject.put("state", "WON");
-                jobject.put("message", "player one won!");
-            } else {
-                jobject.put("state", "LOST");
-                jobject.put("message", "Sorry, player two lost:(");
-            }
 
-            return jobject;
-        } else if (respon.get("message").contains("two won")) {
-            if (id2Ip.get(2).equals(usersIp)) {
+            if (id2Ip.get(1).equals(usersIp)) { // if player one requested for getstate
                 jobject.put("state", "WON");
-                jobject.put("message", "player two won!");
-            } else {
+                jobject.put("message", id2Name.get(1) + " won!");
+            } else {                            //if player two requested for getstate
                 jobject.put("state", "LOST");
-                jobject.put("message", "Sorry, player one lost:(");
+                jobject.put("message", "Sorry, player two lost :( , we suggest u to buy a nintendo switch in the next year :)");
             }
             return jobject;
+        } else
+            if (respon.get("message").contains("two won")) {   // if there is any winner, finish the game and return the winner
 
+            if (id2Ip.get(2).equals(usersIp)) {// if player two requested for getstate
+                jobject.put("state", "WON");
+                jobject.put("message", id2Name.get(2) + " won!");
+            } else {                            //if player one requested for getstate
+                jobject.put("state", "LOST");
+                jobject.put("message", "Sorry, player one lost :( , ");
+            }
+            return jobject;
         }
 /*
  * save the ip of requester
@@ -139,12 +141,17 @@ public class Connect4Controller {
 
     }
     //--------------------------------------------------------------------------------------------------------
-    private boolean isTheGameDraw(int[][] loc) {
-        for (int i = 0; i <6 ; i++) {
-            for (int j = 0; j <7 ; j++) {
-                if ((loc[i][j]) != 0) {
-                    return false;
-                }
+
+    /**
+     * it will return draw if all the columns is full and no one is won.
+     * @param loc
+     * @return
+     */
+    private boolean boardIsFull(int[][] loc) {
+        int row = 5;
+        for (int x = 0; x <=7; x++) {
+            if ( loc[row][x] == 0) {
+                return false;
             }
         }
         return true;
@@ -351,9 +358,7 @@ public class Connect4Controller {
         }
         lastMove = column;
         respon.put("message", "Disc entered");
-
         return respon;
-
     }
 
     //--------------------------------------------------------------------------------------------------------
@@ -406,7 +411,6 @@ public class Connect4Controller {
                 return respon;
             }
         }
-
         return null;
     }
 }
