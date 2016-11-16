@@ -39,8 +39,8 @@
       <file leaf-file-name="Connect4Controller.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/srv/Connect4Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="966">
-              <caret line="58" column="42" selection-start-line="58" selection-start-column="42" selection-end-line="58" selection-end-column="42" />
+            <state relative-caret-position="1008">
+              <caret line="53" column="9" selection-start-line="53" selection-start-column="9" selection-end-line="53" selection-end-column="9" />
               <folding>
                 <element signature="docComment;method#boardIsFull#0;class#Connect4Controller#0" expanded="false" />
                 <element signature="method#boardIsFull#0;class#Connect4Controller#0" expanded="false" />
@@ -50,7 +50,6 @@
                 <element signature="docComment;method#topOfColumn#0;class#Connect4Controller#0" expanded="false" />
                 <element signature="method#topOfColumn#0;class#Connect4Controller#0" expanded="false" />
                 <element signature="method#GetLastTurn#0;class#Connect4Controller#0" expanded="false" />
-                <element signature="method#GetName#0;class#Connect4Controller#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -699,15 +698,15 @@
       <workItem from="1479046354272" duration="1439000" />
       <workItem from="1479110661942" duration="18103000" />
       <workItem from="1479139302644" duration="13021000" />
-      <workItem from="1479300887125" duration="2227000" />
+      <workItem from="1479300887125" duration="2457000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="93660000" />
+    <option name="totallyTimeSpent" value="93890000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-3853" y="-13" width="3866" height="2346" extended-state="6" />
+    <frame x="-3853" y="-13" width="3866" height="2346" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -786,7 +785,6 @@
             <element signature="docComment;method#topOfColumn#0;class#Connect4Controller#0" expanded="false" />
             <element signature="method#topOfColumn#0;class#Connect4Controller#0" expanded="false" />
             <element signature="method#GetLastTurn#0;class#Connect4Controller#0" expanded="false" />
-            <element signature="method#GetName#0;class#Connect4Controller#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -816,7 +814,6 @@
             <element signature="docComment;method#topOfColumn#0;class#Connect4Controller#0" expanded="false" />
             <element signature="method#topOfColumn#0;class#Connect4Controller#0" expanded="false" />
             <element signature="method#GetLastTurn#0;class#Connect4Controller#0" expanded="false" />
-            <element signature="method#GetName#0;class#Connect4Controller#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -846,7 +843,6 @@
             <element signature="docComment;method#topOfColumn#0;class#Connect4Controller#0" expanded="false" />
             <element signature="method#topOfColumn#0;class#Connect4Controller#0" expanded="false" />
             <element signature="method#GetLastTurn#0;class#Connect4Controller#0" expanded="false" />
-            <element signature="method#GetName#0;class#Connect4Controller#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -877,7 +873,6 @@
             <element signature="docComment;method#topOfColumn#0;class#Connect4Controller#0" expanded="false" />
             <element signature="method#topOfColumn#0;class#Connect4Controller#0" expanded="false" />
             <element signature="method#GetLastTurn#0;class#Connect4Controller#0" expanded="false" />
-            <element signature="method#GetName#0;class#Connect4Controller#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -914,8 +909,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/srv/Connect4Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="966">
-          <caret line="58" column="42" selection-start-line="58" selection-start-column="42" selection-end-line="58" selection-end-column="42" />
+        <state relative-caret-position="1008">
+          <caret line="53" column="9" selection-start-line="53" selection-start-column="9" selection-end-line="53" selection-end-column="9" />
           <folding>
             <element signature="docComment;method#boardIsFull#0;class#Connect4Controller#0" expanded="false" />
             <element signature="method#boardIsFull#0;class#Connect4Controller#0" expanded="false" />
@@ -925,7 +920,6 @@
             <element signature="docComment;method#topOfColumn#0;class#Connect4Controller#0" expanded="false" />
             <element signature="method#topOfColumn#0;class#Connect4Controller#0" expanded="false" />
             <element signature="method#GetLastTurn#0;class#Connect4Controller#0" expanded="false" />
-            <element signature="method#GetName#0;class#Connect4Controller#0" expanded="false" />
           </folding>
         </state>
       </provider>
