@@ -79,7 +79,8 @@ public class Connect4Controller {
 
         if (boardIsFull(loc) && (! respon.get("message").contains("two won")) && (! respon.get("message").contains("one won")) ) {
             jobject.put("state", "DRAW");
-            jobject.put("message" , " player 3 in the winner :) !!!!");
+            jobject.put("message" , "Draw, there is no winner, or maybe player 3 is the winner :) !!!!");
+            gameFinished = true;
             return jobject;
         }
 
@@ -92,6 +93,7 @@ public class Connect4Controller {
                 jobject.put("state", "LOST");
                 jobject.put("message", "Sorry, player two lost :( , we suggest u to buy a nintendo switch in the next year :)");
             }
+            gameFinished = true;
             return jobject;
         } else
             if (respon.get("message").contains("two won")) {   // if there is any winner, finish the game and return the winner
@@ -103,6 +105,7 @@ public class Connect4Controller {
                 jobject.put("state", "LOST");
                 jobject.put("message", "Sorry, player one lost :( , ");
             }
+            gameFinished = true;
             return jobject;
         }
 /*
@@ -293,6 +296,12 @@ public class Connect4Controller {
 
         int column = Integer.valueOf(Url.get("column").toString());
 
+        if (gameFinished) {
+            respon.put("status" , "GAME_FINISHED");
+            respon.put("message" , "The game has been finished. please restart the server!");
+            return respon;
+        }
+
         if (column > 6) {
             respon.put("status", "NOT");
             respon.put("message" , "the column number is not in the range 0-6");
@@ -388,6 +397,11 @@ public class Connect4Controller {
     @RequestMapping(method = RequestMethod.GET, value = "GetLastTurn")  //http://127.0.0.1:8080/GetLastTurn
     public Map<String, Object> GetLastTurn() {
         Map<String, Object> respon = new HashMap<String, Object>();
+        if (gameFinished) {
+            respon.put("status" , "GAME_FINISHED");
+            respon.put("message" , "The game has been finished. please restart the server!");
+            return respon;
+        }
 
         if (lastMove == -1)
             return null;
@@ -400,6 +414,11 @@ public class Connect4Controller {
     @RequestMapping(method = RequestMethod.GET, value = "GetName")  //http://127.0.0.1:8080/GetName
     public Map<String, String> GetName(HttpServletRequest servletRequest) {
         Map<String, String> respon = new HashMap<String, String>();
+        if (gameFinished) {
+            respon.put("status" , "GAME_FINISHED");
+            respon.put("message" , "The game has been finished. please restart the server!");
+            return respon;
+        }
 
         Integer id = (Integer) ip2Id.get(servletRequest.getRemoteAddr());
 
