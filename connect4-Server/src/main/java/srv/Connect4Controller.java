@@ -56,7 +56,7 @@ public class Connect4Controller {
         name2Ip.put(name, servletRequest.getRemoteAddr());
         id2Ip.put((int) counter.get() + 1, servletRequest.getRemoteAddr());
         ip2Id.put(servletRequest.getRemoteAddr(), (int) counter.get());
-        id2Name.put((int) counter.get(), name);
+        id2Name.put((int) counter.get() +1, name);
         String msg = counter.get() == 0 ? " player one " : " player two";
 
 
