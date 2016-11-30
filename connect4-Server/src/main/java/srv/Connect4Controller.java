@@ -402,9 +402,6 @@ public class Connect4Controller {
             respon.put("message" , "The game has been finished. please restart the server!");
             return respon;
         }
-
-        if (lastMove == -1)
-            return null;
         respon.put("column", lastMove);
 
         return respon;
@@ -422,8 +419,8 @@ public class Connect4Controller {
 
         Integer id = (Integer) ip2Id.get(servletRequest.getRemoteAddr());
 
-        if (id != null && (id >= 0 && id <= 1)) {
-            int oponentId = (id == 0 ? 1 : 0);
+        if (id != null && (id >= 1 && id <= 2)) {
+            int oponentId = (id == 1 ? 2 : 1);
             String oponentName = (String) id2Name.get(oponentId);
             if (oponentName != null) {
                 respon.put("playerName", oponentName);
